@@ -1,0 +1,42 @@
+version: "3.3"
+services:
+  mysql-local:
+    image: mariadb:10.7.3 #mysql currently doesn't work for ARM64
+    env_file: ./.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+    ports:
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+
+  phpmyadmin:
+    image: phpmyadmin
+    platform: linux/x86_64
+    restart: always
+    ports:
+      - 9090:80
+    environment:
+      - PMA_ARBITRARY=1
+
+  app:
+    depends_on:
+      - mysql-local
+    build: .
+    env_file: ./.env
+    ports:
+      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+    environment:
+      SPRING_APPLICATION_JSON: '{
+        "spring.datasource.url"  : "jdbc:mysql://mysql-local:$MYSQLDB_DOCKER_PORT/$MYSQLDB_DATABASE?allowPublicKeyRetrieval=true&useSSL=false",
+        "spring.datasource.username" : "$MYSQLDB_USER",
+        "spring.datasource.password" : "$MYSQLDB_ROOT_PASSWORD",
+        "spring.jpa.properties.hibernate.dialect" : "org.hibernate.dialect.MySQL5InnoDBDialect",
+        "spring.jpa.hibernate.ddl-auto" : "update",
+        "bezkoder.app.jwtCookieName" : "bezkoder",
+        "bezkoder.app.jwtSecret" : "bezKoderSecretKey",
+        "bezkoder.app.jwtExpirationMs" : "86400000"
+      }'
+    volumes:
+      - .m2:/root/.m2
+    stdin_open: true
+    tty: true
