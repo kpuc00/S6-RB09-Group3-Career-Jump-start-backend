@@ -1,3 +1,5 @@
 .idea
 .m2/
 target/
+.env
+env
