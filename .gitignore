@@ -1,6 +1,6 @@
 .idea
 .m2/
-target/
+target
 .env
 env
 src/main/resources/application.properties
