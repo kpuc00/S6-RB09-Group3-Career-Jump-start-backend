@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.bezkoder.spring.login.models.*;
+import com.bezkoder.spring.login.repository.TypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -22,9 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bezkoder.spring.login.models.ERole;
-import com.bezkoder.spring.login.models.Role;
-import com.bezkoder.spring.login.models.User;
 import com.bezkoder.spring.login.payload.request.LoginRequest;
 import com.bezkoder.spring.login.payload.request.SignupRequest;
 import com.bezkoder.spring.login.payload.response.UserInfoResponse;
@@ -46,6 +45,9 @@ public class AuthController {
 
   @Autowired
   RoleRepository roleRepository;
+
+  @Autowired
+  TypeRepository typeRepository;
 
   @Autowired
   PasswordEncoder encoder;
@@ -120,7 +122,20 @@ public class AuthController {
         }
       });
     }
-
+    String type = signUpRequest.getType();
+    if(type != null){
+      if(type == "candidate"){
+        Type userType = typeRepository.findByName(EType.TYPE_CANDIDATE)
+                .orElseThrow(() -> new RuntimeException("Error: Candidate type is not found"));
+        user.setType(userType);
+        System.out.println(userType);
+      }
+      if(type == "company") {
+        Type userType = typeRepository.findByName(EType.TYPE_COMPANY)
+                .orElseThrow(() -> new RuntimeException("Error: Company type is not found"));
+        user.setType(userType);
+      }
+    } else throw new RuntimeException("Error : Haven't picked user type.");
     user.setRoles(roles);
     userRepository.save(user);
 
