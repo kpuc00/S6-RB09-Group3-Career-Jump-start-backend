@@ -17,9 +17,6 @@ public class SignupRequest {
     private Set<String> role;
 
     @NotBlank
-    private String type;
-
-    @NotBlank
     @Size(min = 6, max = 40)
     private String password;
 
@@ -56,11 +53,4 @@ public class SignupRequest {
       this.role = role;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 }

@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import com.bezkoder.spring.login.models.*;
-import com.bezkoder.spring.login.repository.TypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -45,9 +44,6 @@ public class AuthController {
 
   @Autowired
   RoleRepository roleRepository;
-
-  @Autowired
-  TypeRepository typeRepository;
 
   @Autowired
   PasswordEncoder encoder;
@@ -97,9 +93,7 @@ public class AuthController {
     Set<Role> roles = new HashSet<>();
 
     if (strRoles == null) {
-      Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-          .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-      roles.add(userRole);
+      throw new RuntimeException("Error: Set role! ");
     } else {
       strRoles.forEach(role -> {
         switch (role) {
@@ -109,33 +103,25 @@ public class AuthController {
           roles.add(adminRole);
 
           break;
-        case "mod":
-          Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-          roles.add(modRole);
-
+        case "company":
+          Role companyRole = roleRepository.findByName(ERole.ROLE_COMPANY)
+                  .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+          roles.add(companyRole);
           break;
-        default:
-          Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-          roles.add(userRole);
+        case "candidate":
+          Role candidateRole = roleRepository.findByName(ERole.ROLE_CANDIDATE)
+                  .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+          roles.add(candidateRole);
+          break;
+        case "matcher":
+          Role matcherRole = roleRepository.findByName(ERole.ROLE_MATCHER)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+          roles.add(matcherRole);
+          break;
         }
       });
     }
-    String type = signUpRequest.getType();
-    if(type != null){
-      if(type == "candidate"){
-        Type userType = typeRepository.findByName(EType.TYPE_CANDIDATE)
-                .orElseThrow(() -> new RuntimeException("Error: Candidate type is not found"));
-        user.setType(userType);
-        System.out.println(userType);
-      }
-      if(type == "company") {
-        Type userType = typeRepository.findByName(EType.TYPE_COMPANY)
-                .orElseThrow(() -> new RuntimeException("Error: Company type is not found"));
-        user.setType(userType);
-      }
-    } else throw new RuntimeException("Error : Haven't picked user type.");
+
     user.setRoles(roles);
     userRepository.save(user);
 

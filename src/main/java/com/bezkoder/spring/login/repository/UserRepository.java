@@ -1,8 +1,12 @@
 package com.bezkoder.spring.login.repository;
 
+import java.awt.print.Pageable;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
+import com.bezkoder.spring.login.models.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,13 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   Boolean existsByEmail(String email);
 
-  @Override
-  Optional<User> findById(Long aLong);
+  Optional<User> findById(Long id);
 
-  @Query("SELECT u FROM User u where u.type.name = 'TYPE_CANDIDATE' ")
-  List<User> findCollectionCandidate();
-
-  @Query("SELECT u FROM User u where u.type.name = 'TYPE_COMPANY' ")
-  List<User> findCollectionCompany();
 
 }

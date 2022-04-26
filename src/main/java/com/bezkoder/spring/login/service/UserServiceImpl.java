@@ -18,32 +18,32 @@ public class UserServiceImpl implements UserService {
         return userRepo.findById(aLong);
     }
 
-    @Override
-    public List<User> findCandidates() {
-        List<User> candidates = new ArrayList<>();
-        try{
-            for (User u:
-                 userRepo.findCollectionCandidate()) {
-               candidates.add(u);
-            }
-        } catch(Exception ex){
-            ex.getMessage();
-        }
-        return candidates;
-    }
-
-    @Override
-    public List<User> findCompanies() {
-        List<User> companies = new ArrayList<>();
-        try{
-            for (User u:
-                    userRepo.findCollectionCompany()) {
-                companies.add(u);
-            }
-        } catch(Exception ex){
-            ex.getMessage();
-        }
-        return companies;
-    }
+//    @Override
+//    public List<User> findCandidates() {
+//        List<User> candidates = new ArrayList<>();
+//        try{
+//            for (User u:
+//                 userRepo.findCollectionCandidate()) {
+//               candidates.add(u);
+//            }
+//        } catch(Exception ex){
+//            ex.getMessage();
+//        }
+//        return candidates;
+//    }
+//
+//    @Override
+//    public List<User> findCompanies() {
+//        List<User> companies = new ArrayList<>();
+//        try{
+//            for (User u:
+//                    userRepo.findCollectionCompany()) {
+//                companies.add(u);
+//            }
+//        } catch(Exception ex){
+//            ex.getMessage();
+//        }
+//        return companies;
+//    }
 
 }
