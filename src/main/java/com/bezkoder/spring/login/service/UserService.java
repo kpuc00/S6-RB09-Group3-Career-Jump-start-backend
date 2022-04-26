@@ -14,4 +14,8 @@ public interface UserService  {
     List<User> findCandidates();
 
     List<User> findCompanies();
+
+    User updateUser(Long id, User user);
+
+    void deleteUser(Long id);
 }

@@ -21,15 +21,26 @@ public class UserController {
     return "Public Content.";
   }
 
-  @GetMapping("/all/candidates")
+  @GetMapping("/candidates")
   @PreAuthorize("hasRole('ADMIN')")
   public List<User> getCandidates(){
       return userService.findCandidates();
   }
 
-  @GetMapping("/all/companies")
+  @GetMapping("/companies")
   @PreAuthorize("hasRole('ADMIN')")
   public List<User> getCompanies(){
       return userService.findCompanies();
+  }
+
+  @PutMapping("/user/{:id}")
+  @PreAuthorize("hasRole('ADMIN')")
+  public User editUser(@RequestBody User user, @PathVariable Long id){
+      return userService.updateUser(id, user);
+  }
+  @DeleteMapping("/delete/{:id}")
+  @PreAuthorize("hasRole('ADMIN')")
+  public void deleteUser(@PathVariable Long id){
+     userService.deleteUser(id);
   }
 }

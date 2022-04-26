@@ -6,6 +6,7 @@ import com.bezkoder.spring.login.models.User;
 import com.bezkoder.spring.login.repository.RoleRepository;
 import com.bezkoder.spring.login.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -40,6 +41,24 @@ public class UserServiceImpl implements UserService {
         r.ifPresent(roleSet::add);
 
         return userRepo.findAllByRolesIn(roleSet);
+    }
+
+    @Override
+    public User updateUser(Long id, User u) {
+        Optional<User> user =findById(id);
+        if(user.isPresent()){
+            user.get().setEmail(u.getEmail());
+            user.get().setPassword(u.getPassword());
+            return userRepo.save(user.get());
+        }
+        else{
+            return null;
+        }
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        userRepo.deleteById(id);
     }
 
 

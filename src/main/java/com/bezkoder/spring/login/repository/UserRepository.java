@@ -28,4 +28,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   List<User> findAllByRolesIn(Set<Role> roles);
 
+  @Override
+  <S extends User> S save(S entity);
+
+  @Override
+  void deleteById(Long aLong);
 }
