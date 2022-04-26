@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.bezkoder.spring.login.models.ERole;
 import com.bezkoder.spring.login.models.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,5 +24,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   Optional<User> findById(Long id);
 
+  List<User> findAll();
+
+  List<User> findAllByRolesIn(Set<Role> roles);
 
 }

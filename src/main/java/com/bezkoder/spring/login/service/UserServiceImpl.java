@@ -1,49 +1,46 @@
 package com.bezkoder.spring.login.service;
 
+import com.bezkoder.spring.login.models.ERole;
+import com.bezkoder.spring.login.models.Role;
 import com.bezkoder.spring.login.models.User;
+import com.bezkoder.spring.login.repository.RoleRepository;
 import com.bezkoder.spring.login.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepo;
+
+    @Autowired
+    RoleRepository roleRepo;
 
     @Override
     public Optional<User> findById(Long aLong) {
         return userRepo.findById(aLong);
     }
 
-//    @Override
-//    public List<User> findCandidates() {
-//        List<User> candidates = new ArrayList<>();
-//        try{
-//            for (User u:
-//                 userRepo.findCollectionCandidate()) {
-//               candidates.add(u);
-//            }
-//        } catch(Exception ex){
-//            ex.getMessage();
-//        }
-//        return candidates;
-//    }
-//
-//    @Override
-//    public List<User> findCompanies() {
-//        List<User> companies = new ArrayList<>();
-//        try{
-//            for (User u:
-//                    userRepo.findCollectionCompany()) {
-//                companies.add(u);
-//            }
-//        } catch(Exception ex){
-//            ex.getMessage();
-//        }
-//        return companies;
-//    }
+    @Override
+    public List<User> findCandidates() {
+        Optional<Role> r = roleRepo.findByName(ERole.ROLE_CANDIDATE);
+        Set<Role> roleSet = new HashSet<>();
+        r.ifPresent(roleSet::add);
+
+        return userRepo.findAllByRolesIn(roleSet);
+    }
+
+    @Override
+    public List<User> findCompanies() {
+        Optional<Role> r = roleRepo.findByName(ERole.ROLE_COMPANY);
+        Set<Role> roleSet = new HashSet<>();
+        r.ifPresent(roleSet::add);
+
+        return userRepo.findAllByRolesIn(roleSet);
+    }
+
 
 }

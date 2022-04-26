@@ -36,6 +36,7 @@ import com.bezkoder.spring.login.security.services.UserDetailsImpl;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
   @Autowired
   AuthenticationManager authenticationManager;
 
@@ -101,7 +102,6 @@ public class AuthController {
           Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
               .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
           roles.add(adminRole);
-
           break;
         case "company":
           Role companyRole = roleRepository.findByName(ERole.ROLE_COMPANY)
