@@ -83,6 +83,7 @@ public class AuthController {
   @RabbitListener(queues = "${queue.name}")
   public String getUserDetailsFromToken(String token) {
     UserDetails userDetails = getUserFromToken(token);
+    System.out.println("Received Token:" + token);
     assert userDetails != null;
     return userDetails.getUsername();
   }
