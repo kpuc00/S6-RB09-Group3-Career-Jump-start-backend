@@ -6,7 +6,9 @@ import com.bezkoder.spring.login.models.User;
 import com.bezkoder.spring.login.repository.RoleRepository;
 import com.bezkoder.spring.login.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -20,9 +22,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     RoleRepository roleRepo;
 
+    @Autowired
+    PasswordEncoder encoder;
+
     @Override
     public Optional<User> findById(Long aLong) {
-        return userRepo.findById(aLong);
+            return userRepo.findById(aLong);
     }
 
     @Override
@@ -36,6 +41,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findCompanies() {
+
         Optional<Role> r = roleRepo.findByName(ERole.ROLE_COMPANY);
         Set<Role> roleSet = new HashSet<>();
         r.ifPresent(roleSet::add);
@@ -45,10 +51,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(Long id, User u) {
-        Optional<User> user =findById(id);
+        System.out.println("HIIII");
+        Optional<User> user = findById(id);
+        System.out.println("user by id: " + user);
         if(user.isPresent()){
+
             user.get().setEmail(u.getEmail());
-            user.get().setPassword(u.getPassword());
+            user.get().setPassword(encoder.encode(u.getPassword()));
+            System.out.println("changed user : " + user.get());
             return userRepo.save(user.get());
         }
         else{
