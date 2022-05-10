@@ -1,5 +1,10 @@
 package com.bezkoder.spring.login.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,6 +30,22 @@ public class User {
 
   @NotBlank
   @Size(max = 50)
+  private String firstName;
+
+  @NotBlank
+  @Size(max = 50)
+  private String lastName;
+
+  @NotBlank
+  @Size(max = 50)
+  private String phoneNumber;
+
+//  @JsonFormat(pattern =  "dd-MM-yyyy")
+  @DateTimeFormat
+  private Date dob;
+
+  @NotBlank
+  @Size(max = 50)
   @Email
   private String email;
 
@@ -39,13 +60,20 @@ public class User {
   private Set<Role> roles = new HashSet<>();
 
   public User() {
+
   }
 
-  public User(String username, String email, String password) {
+  public User(String username, String firstName, String lastName, String phoneNumber, Date dob, String email, String password) {
     this.username = username;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.phoneNumber = phoneNumber;
+    this.dob = dob;
     this.email = email;
     this.password = password;
   }
+
+
 
   public Long getId() {
     return id;
@@ -61,6 +89,38 @@ public class User {
 
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  public String getFirstName(){
+    return firstName;
+  }
+
+  public void SetFirstName(String firstName){
+    this.firstName = firstName;
+  }
+
+  public String getLastName(){
+    return lastName;
+  }
+
+  public void setLastName(String lastName){
+    this.lastName = lastName;
+  }
+
+  public String getPhoneNumber(){
+    return phoneNumber;
+  }
+
+  public void setPhoneNumber(String phoneNumber){
+    this.phoneNumber = phoneNumber;
+  }
+
+  public Date getDob(){
+    return dob;
+  }
+
+  public void setDob(Date dob){
+    this.dob = dob;
   }
 
   public String getEmail() {

@@ -55,8 +55,9 @@ public class UserServiceImpl implements UserService {
         Optional<User> user = findById(id);
         System.out.println("user by id: " + user);
         if(user.isPresent()){
-
-            user.get().setEmail(u.getEmail());
+            if(!userRepo.existsByEmail(u.getEmail())){
+                user.get().setEmail(u.getEmail());
+            }
             user.get().setPassword(encoder.encode(u.getPassword()));
             System.out.println("changed user : " + user.get());
             return userRepo.save(user.get());

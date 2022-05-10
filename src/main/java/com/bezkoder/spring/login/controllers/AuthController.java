@@ -1,5 +1,8 @@
 package com.bezkoder.spring.login.controllers;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -69,8 +72,11 @@ public class AuthController {
         .collect(Collectors.toList());
 
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-        .body(new UserInfoResponse(userDetails.getId(),
-                                   userDetails.getUsername(),
+        .body(new UserInfoResponse(userDetails.getUsername(),
+                                   userDetails.getFirstName(),
+                                   userDetails.getLastName(),
+                                   userDetails.getPhoneNumber(),
+                                   userDetails.getDob(),
                                    userDetails.getEmail(),
                                    roles));
   }
@@ -87,6 +93,10 @@ public class AuthController {
 
     // Create new user's account
     User user = new User(signUpRequest.getUsername(),
+                         signUpRequest.getFirstName(),
+                         signUpRequest.getLastName(),
+                         signUpRequest.getPhoneNumber(),
+                         signUpRequest.getDob(),
                          signUpRequest.getEmail(),
                          encoder.encode(signUpRequest.getPassword()));
 
