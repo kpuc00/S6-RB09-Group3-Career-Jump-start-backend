@@ -1,5 +1,6 @@
 package com.bezkoder.spring.login.service;
 
+import com.bezkoder.spring.login.models.ERole;
 import com.bezkoder.spring.login.models.Role;
 import com.bezkoder.spring.login.models.User;
 
@@ -14,6 +15,10 @@ public interface UserService  {
     List<User> findCandidates();
 
     List<User> findCompanies();
+
+    Set<Role> roleToSet(ERole eRole);
+
+    Optional<Role> findRoleByName(ERole eRole);
 
     User updateUser(Long id, User user);
 

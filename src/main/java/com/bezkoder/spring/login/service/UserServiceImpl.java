@@ -32,22 +32,32 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findCandidates() {
-        Optional<Role> r = roleRepo.findByName(ERole.ROLE_CANDIDATE);
-        Set<Role> roleSet = new HashSet<>();
-        r.ifPresent(roleSet::add);
-
-        return userRepo.findAllByRolesIn(roleSet);
+//        Optional<Role> r = roleRepo.findByName(ERole.ROLE_CANDIDATE);
+//        Set<Role> roleSet = new HashSet<>();
+//        r.ifPresent(roleSet::add);
+        return userRepo.findAllByRolesIn(roleToSet(ERole.ROLE_CANDIDATE));
     }
 
     @Override
     public List<User> findCompanies() {
-
-        Optional<Role> r = roleRepo.findByName(ERole.ROLE_COMPANY);
-        Set<Role> roleSet = new HashSet<>();
-        r.ifPresent(roleSet::add);
-
-        return userRepo.findAllByRolesIn(roleSet);
+//        Optional<Role> r = roleRepo.findByName(ERole.ROLE_COMPANY);
+//        Set<Role> roleSet = new HashSet<>();
+//        r.ifPresent(roleSet::add);
+        return userRepo.findAllByRolesIn(roleToSet(ERole.ROLE_COMPANY));
     }
+
+    @Override
+    public Optional<Role> findRoleByName(ERole eRole) {
+        return roleRepo.findByName(eRole);
+    }
+
+    public Set<Role> roleToSet(ERole role){
+        Set<Role> roleSet = new HashSet<>();
+        Optional<Role> r = findRoleByName(role);
+        r.ifPresent(roleSet::add);
+        return roleSet;
+    }
+
 
     @Override
     public User updateUser(Long id, User u) {
