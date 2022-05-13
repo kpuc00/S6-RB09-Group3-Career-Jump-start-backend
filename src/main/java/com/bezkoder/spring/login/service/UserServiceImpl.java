@@ -32,17 +32,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findCandidates() {
-//        Optional<Role> r = roleRepo.findByName(ERole.ROLE_CANDIDATE);
-//        Set<Role> roleSet = new HashSet<>();
-//        r.ifPresent(roleSet::add);
         return userRepo.findAllByRolesIn(roleToSet(ERole.ROLE_CANDIDATE));
     }
 
     @Override
     public List<User> findCompanies() {
-//        Optional<Role> r = roleRepo.findByName(ERole.ROLE_COMPANY);
-//        Set<Role> roleSet = new HashSet<>();
-//        r.ifPresent(roleSet::add);
         return userRepo.findAllByRolesIn(roleToSet(ERole.ROLE_COMPANY));
     }
 
@@ -60,21 +54,27 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User updateUser(Long id, User u) {
-        System.out.println("HIIII");
+    public User updateUserDetails(Long id, User u) {
         Optional<User> user = findById(id);
-        System.out.println("user by id: " + user);
         if(user.isPresent()){
             if(!userRepo.existsByEmail(u.getEmail())){
                 user.get().setEmail(u.getEmail());
             }
+            user.get().setPhoneNumber(u.getPhoneNumber());
             user.get().setPassword(encoder.encode(u.getPassword()));
-            System.out.println("changed user : " + user.get());
+
             return userRepo.save(user.get());
         }
         else{
             return null;
         }
+    }
+
+    @Override
+    public User updateUserStatus(Long id, User u){
+        Optional<User> user = findById(id);
+        user.get().setStatus(u.getStatus());
+        return userRepo.save(user.get());
     }
 
     @Override

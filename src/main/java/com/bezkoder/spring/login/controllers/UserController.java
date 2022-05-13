@@ -57,12 +57,22 @@ public class UserController {
 
   @PutMapping("/{id}")
   @PreAuthorize("hasRole('ADMIN')")
-  public ResponseEntity<?> editUser(@RequestBody User user, @PathVariable Long id){
+  public ResponseEntity<?> editUserDetails(@RequestBody User user, @PathVariable Long id){
       if(userService.findById(id).isPresent()){
-        userService.updateUser(id, user);
-        return ResponseEntity.status(HttpStatus.OK).body("Successfully changed");
+        userService.updateUserDetails(id, user);
+        return ResponseEntity.status(HttpStatus.OK).body("Details Successfully changed");
       }
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
+  }
+
+  @PutMapping("/status/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<?> editUserStatus(@RequestBody User user, @PathVariable Long id){
+    if(userService.findById(id).isPresent()){
+      userService.updateUserStatus(id, user);
+      return ResponseEntity.status(HttpStatus.OK).body("Status Successfully changed");
+    }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
   }
 
   @DeleteMapping("/{id}")

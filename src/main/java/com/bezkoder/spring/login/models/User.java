@@ -1,6 +1,7 @@
 package com.bezkoder.spring.login.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -40,7 +41,6 @@ public class User {
   @Size(max = 50)
   private String phoneNumber;
 
-//  @JsonFormat(pattern =  "dd-MM-yyyy")
   @DateTimeFormat
   private Date dob;
 
@@ -59,6 +59,10 @@ public class User {
              inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
 
+  @Column(columnDefinition = "varchar(32) default 'UNASSIGNED'")
+  @Enumerated(value = EnumType.STRING)
+  private EStatus status = EStatus.UNASSIGNED;
+
   public User() {
 
   }
@@ -72,7 +76,6 @@ public class User {
     this.email = email;
     this.password = password;
   }
-
 
 
 
@@ -92,11 +95,11 @@ public class User {
     this.username = username;
   }
 
-  public String getFirstName(){
+  public String getFirstName() {
     return firstName;
   }
 
-  public void SetFirstName(String firstName){
+  public void setFirstName(String firstName) {
     this.firstName = firstName;
   }
 
@@ -146,6 +149,14 @@ public class User {
 
   public void setRoles(Set<Role> roles) {
     this.roles = roles;
+  }
+
+  public EStatus getStatus() {
+    return status;
+  }
+
+  public void setStatus(EStatus status) {
+    this.status = status;
   }
 
 }

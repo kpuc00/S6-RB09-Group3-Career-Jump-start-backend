@@ -1,5 +1,6 @@
 package com.bezkoder.spring.login.payload.request;
 
+import com.bezkoder.spring.login.models.EStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -7,6 +8,8 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.*;
  
 public class SignupRequest {
@@ -41,6 +44,8 @@ public class SignupRequest {
     @NotBlank
     @Size(min = 6, max = 40)
     private String password;
+
+
 
 
     public String getUsername() {

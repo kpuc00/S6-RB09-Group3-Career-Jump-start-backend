@@ -20,7 +20,9 @@ public interface UserService  {
 
     Optional<Role> findRoleByName(ERole eRole);
 
-    User updateUser(Long id, User user);
+    User updateUserDetails(Long id, User user);
+
+    User updateUserStatus(Long id, User user);
 
     void deleteUser(Long id);
 }

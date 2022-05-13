@@ -1,12 +1,13 @@
 package com.bezkoder.spring.login.payload.response;
 
 
+import com.bezkoder.spring.login.models.EStatus;
+
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
 public class UserInfoResponse {
-	private Long id;
 	private String username;
 	private String firstName;
 	private String lastName;
@@ -16,7 +17,6 @@ public class UserInfoResponse {
 	private List<String> roles;
 
 	public UserInfoResponse(String username, String firstName, String lastName, String phoneNumber, Date dob, String email, List<String> roles) {
-		this.id = id;
 		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -24,14 +24,6 @@ public class UserInfoResponse {
 		this.dob = dob;
 		this.email = email;
 		this.roles = roles;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getEmail() {
