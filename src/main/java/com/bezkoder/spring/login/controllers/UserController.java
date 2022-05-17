@@ -38,21 +38,15 @@ public class UserController {
   @GetMapping("/candidates")
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> getCandidates(){
-      List<User> candidates = userService.findCandidates();
-    if(!candidates.isEmpty()){
-      return ResponseEntity.status(HttpStatus.FOUND).body(candidates);
-    }
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
+    List<User> candidates = userService.findCandidates();
+    return ResponseEntity.status(HttpStatus.OK).body(candidates);
   }
 
   @GetMapping("/companies")
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> getCompanies(){
     List<User> companies = userService.findCompanies();
-    if(!companies.isEmpty()){
-      return ResponseEntity.status(HttpStatus.FOUND).body(companies);
-    }
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
+    return ResponseEntity.status(HttpStatus.OK).body(companies);
   }
 
   @PutMapping("/{id}")
