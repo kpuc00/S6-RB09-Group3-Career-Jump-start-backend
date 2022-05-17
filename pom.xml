@@ -15,6 +15,7 @@
 	<description>Spring Boot Login example with Spring Security, JWT and MySQL - Rest API</description>
 	<properties>
 		<java.version>1.8</java.version>
+		<start-class>com.bezkoder.spring.login.SpringBootLoginExampleApplication</start-class>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -38,6 +39,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
@@ -58,6 +64,10 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.amqp</groupId>
+			<artifactId>spring-rabbit-test</artifactId>
 		</dependency>
 	</dependencies>
 

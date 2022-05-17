@@ -1,8 +1,6 @@
 package com.bezkoder.spring.login.controllers;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,6 +8,10 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.bezkoder.spring.login.security.services.UserDetailsServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import com.bezkoder.spring.login.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -18,13 +20,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.bezkoder.spring.login.payload.request.LoginRequest;
 import com.bezkoder.spring.login.payload.request.SignupRequest;
@@ -54,6 +54,42 @@ public class AuthController {
 
   @Autowired
   JwtUtils jwtUtils;
+
+  @Autowired
+  private UserDetailsServiceImpl userDetailsService;
+
+  private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+
+
+  private UserDetails getUserFromToken (String token) {
+    try {
+      if (token != null && jwtUtils.validateJwtToken(token)) {
+        String username = jwtUtils.getUserNameFromJwtToken(token);
+        return userDetailsService.loadUserByUsername(username);
+      }
+    } catch (Exception e) {
+      logger.error("Cannot set user authentication: {}", e);
+    }
+
+    return null;
+  }
+
+//  @RequestMapping(value = "/userdetails", method = RequestMethod.GET)
+//  @ResponseBody
+  @RabbitListener(queues = "${queue.name}")
+  public String getUserDetailsFromToken(String token) {
+    UserDetails userDetails = getUserFromToken(token);
+    System.out.println("Received Token:" + token);
+    assert userDetails != null;
+    return userDetails.getUsername();
+  }
+
+  @RequestMapping(value = "/checkadmin", method = RequestMethod.GET)
+  @ResponseBody
+  public Object checkIfAdmin(Authentication authentication) {
+    Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+    return authentication.getAuthorities();
+  }
 
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
