@@ -1,6 +1,8 @@
 package com.bezkoder.spring.login.security.services;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -15,9 +17,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class UserDetailsImpl implements UserDetails {
   private static final long serialVersionUID = 1L;
 
-  private Long id;
 
   private String username;
+
+  private String firstName;
+
+  private String lastName;
+
+  private String phoneNumber;
+
+  private Date dob;
 
   private String email;
 
@@ -26,10 +35,13 @@ public class UserDetailsImpl implements UserDetails {
 
   private Collection<? extends GrantedAuthority> authorities;
 
-  public UserDetailsImpl(Long id, String username, String email, String password,
+  public UserDetailsImpl(String username, String firstName, String lastName, String phoneNumber, Date dob, String email, String password,
       Collection<? extends GrantedAuthority> authorities) {
-    this.id = id;
     this.username = username;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.phoneNumber = phoneNumber;
+    this.dob = dob;
     this.email = email;
     this.password = password;
     this.authorities = authorities;
@@ -41,8 +53,11 @@ public class UserDetailsImpl implements UserDetails {
         .collect(Collectors.toList());
 
     return new UserDetailsImpl(
-        user.getId(), 
-        user.getUsername(), 
+        user.getUsername(),
+        user.getFirstName(),
+        user.getLastName(),
+        user.getPhoneNumber(),
+        user.getDob(),
         user.getEmail(),
         user.getPassword(), 
         authorities);
@@ -53,9 +68,25 @@ public class UserDetailsImpl implements UserDetails {
     return authorities;
   }
 
-  public Long getId() {
-    return id;
+  public String getFirstName(){
+    return firstName;
   }
+
+
+  public String getLastName(){
+    return lastName;
+  }
+
+
+  public String getPhoneNumber(){
+    return phoneNumber;
+  }
+
+
+  public Date getDob(){
+    return dob;
+  }
+
 
   public String getEmail() {
     return email;
@@ -98,6 +129,6 @@ public class UserDetailsImpl implements UserDetails {
     if (o == null || getClass() != o.getClass())
       return false;
     UserDetailsImpl user = (UserDetailsImpl) o;
-    return Objects.equals(id, user.id);
+    return Objects.equals(username, user.username);
   }
 }

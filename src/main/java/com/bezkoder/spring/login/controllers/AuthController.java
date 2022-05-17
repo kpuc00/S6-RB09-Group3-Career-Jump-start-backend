@@ -1,5 +1,8 @@
 package com.bezkoder.spring.login.controllers;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -7,6 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.bezkoder.spring.login.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -22,9 +26,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bezkoder.spring.login.models.ERole;
-import com.bezkoder.spring.login.models.Role;
-import com.bezkoder.spring.login.models.User;
 import com.bezkoder.spring.login.payload.request.LoginRequest;
 import com.bezkoder.spring.login.payload.request.SignupRequest;
 import com.bezkoder.spring.login.payload.response.UserInfoResponse;
@@ -34,10 +35,11 @@ import com.bezkoder.spring.login.repository.UserRepository;
 import com.bezkoder.spring.login.security.jwt.JwtUtils;
 import com.bezkoder.spring.login.security.services.UserDetailsImpl;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, allowCredentials = "true")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
   @Autowired
   AuthenticationManager authenticationManager;
 
@@ -70,8 +72,11 @@ public class AuthController {
         .collect(Collectors.toList());
 
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-        .body(new UserInfoResponse(userDetails.getId(),
-                                   userDetails.getUsername(),
+        .body(new UserInfoResponse(userDetails.getUsername(),
+                                   userDetails.getFirstName(),
+                                   userDetails.getLastName(),
+                                   userDetails.getPhoneNumber(),
+                                   userDetails.getDob(),
                                    userDetails.getEmail(),
                                    roles));
   }
@@ -88,6 +93,10 @@ public class AuthController {
 
     // Create new user's account
     User user = new User(signUpRequest.getUsername(),
+                         signUpRequest.getFirstName(),
+                         signUpRequest.getLastName(),
+                         signUpRequest.getPhoneNumber(),
+                         signUpRequest.getDob(),
                          signUpRequest.getEmail(),
                          encoder.encode(signUpRequest.getPassword()));
 
@@ -95,9 +104,7 @@ public class AuthController {
     Set<Role> roles = new HashSet<>();
 
     if (strRoles == null) {
-      Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-          .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-      roles.add(userRole);
+      throw new RuntimeException("Error: Set role! ");
     } else {
       strRoles.forEach(role -> {
         switch (role) {
@@ -105,18 +112,22 @@ public class AuthController {
           Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
               .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
           roles.add(adminRole);
-
           break;
-        case "mod":
-          Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-          roles.add(modRole);
-
+        case "company":
+          Role companyRole = roleRepository.findByName(ERole.ROLE_COMPANY)
+                  .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+          roles.add(companyRole);
           break;
-        default:
-          Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-          roles.add(userRole);
+        case "candidate":
+          Role candidateRole = roleRepository.findByName(ERole.ROLE_CANDIDATE)
+                  .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+          roles.add(candidateRole);
+          break;
+        case "matcher":
+          Role matcherRole = roleRepository.findByName(ERole.ROLE_MATCHER)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+          roles.add(matcherRole);
+          break;
         }
       });
     }
