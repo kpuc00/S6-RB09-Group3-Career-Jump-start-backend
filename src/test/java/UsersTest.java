@@ -45,8 +45,8 @@ class UsersTest {
         //WHEN
         Optional<User> existingUser = service.findById(user.getId());
         //THEN
-        //assertThat(existingUser).isEqualTo(Optional.of(user));
-        assertThat(existingUser).isEqualTo(null);
+        assertThat(existingUser).isEqualTo(Optional.of(user));
+        //assertThat(existingUser).isEqualTo(null);
     }
 
     @Test
