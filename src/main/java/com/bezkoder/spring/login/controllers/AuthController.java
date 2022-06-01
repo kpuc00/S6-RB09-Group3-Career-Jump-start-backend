@@ -37,7 +37,7 @@ import com.bezkoder.spring.login.security.services.UserDetailsImpl;
 
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, allowCredentials = "true")
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
   @Autowired
@@ -74,8 +74,6 @@ public class AuthController {
     return null;
   }
 
-//  @RequestMapping(value = "/userdetails", method = RequestMethod.GET)
-//  @ResponseBody
   @RabbitListener(queues = "${queue.name}")
   public String getUserDetailsFromToken(String token) {
     UserDetails userDetails = getUserFromToken(token);
