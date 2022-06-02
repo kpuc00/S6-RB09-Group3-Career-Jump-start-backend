@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
         return userRepo.findById(aLong);
     }
 
+
     @Override
     public List<User> findCandidates() {
         return userRepo.findAllByRolesIn(roleToSet(ERole.ROLE_CANDIDATE));
@@ -77,8 +78,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUserQuestionnaire(Long id){
-        Optional<User> user = findById(id);
+    public User updateUserQuestionnaire(String username){
+        Optional<User> user = userRepo.findByUsername(username);
         user.get().setQuestionnaireAnswered(true);
         return userRepo.save(user.get());
     }

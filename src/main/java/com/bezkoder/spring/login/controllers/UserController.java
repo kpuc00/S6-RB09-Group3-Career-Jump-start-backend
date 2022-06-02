@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.websocket.server.PathParam;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,13 +70,10 @@ public class UserController {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
   }
 
-  @GetMapping("/questionnaire/{id}")
-  public ResponseEntity<?> setQuestionnaireTrue(@PathVariable Long id){
-    if(userService.findById(id).isPresent()){
-      userService.updateUserQuestionnaire(id);
+  @GetMapping(value = "/questionnaire/{username}")
+  public ResponseEntity<?> setQuestionnaireTrue(@PathVariable() String username){
+      userService.updateUserQuestionnaire(username);
       return ResponseEntity.status(HttpStatus.OK).body("Questionnaire Status Successfully changed");
-    }
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
   }
 
   @DeleteMapping("/{id}")
