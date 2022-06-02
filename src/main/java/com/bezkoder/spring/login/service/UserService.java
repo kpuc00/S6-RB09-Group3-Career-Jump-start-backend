@@ -24,7 +24,7 @@ public interface UserService  {
 
     User updateUserStatus(Long id, User user);
 
-    User updateUserQuestionnaire(Long id);
+    User updateUserQuestionnaire(String username);
 
     void deleteUser(Long id);
 }
