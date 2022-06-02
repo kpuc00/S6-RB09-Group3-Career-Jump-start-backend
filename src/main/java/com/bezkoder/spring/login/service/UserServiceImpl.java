@@ -6,8 +6,6 @@ import com.bezkoder.spring.login.models.User;
 import com.bezkoder.spring.login.repository.RoleRepository;
 import com.bezkoder.spring.login.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +25,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findById(Long aLong) {
-            return userRepo.findById(aLong);
+        return userRepo.findById(aLong);
     }
 
     @Override
@@ -45,19 +43,18 @@ public class UserServiceImpl implements UserService {
         return roleRepo.findByName(eRole);
     }
 
-    public Set<Role> roleToSet(ERole role){
+    public Set<Role> roleToSet(ERole role) {
         Set<Role> roleSet = new HashSet<>();
         Optional<Role> r = findRoleByName(role);
         r.ifPresent(roleSet::add);
         return roleSet;
     }
 
-
     @Override
     public User updateUserDetails(Long id, User u) {
         Optional<User> user = findById(id);
-        if(user.isPresent()){
-            if(!userRepo.existsByEmail(u.getEmail())){
+        if (user.isPresent()) {
+            if (!userRepo.existsByEmail(u.getEmail())) {
                 user.get().setEmail(u.getEmail());
             }
             user.get().setPhoneNumber(u.getPhoneNumber());
@@ -67,14 +64,13 @@ public class UserServiceImpl implements UserService {
             user.get().setStatus(u.getStatus());
             user.get().setDob(u.getDob());
             return userRepo.save(user.get());
-        }
-        else{
+        } else {
             return null;
         }
     }
 
     @Override
-    public User updateUserStatus(Long id, User u){
+    public User updateUserStatus(Long id, User u) {
         Optional<User> user = findById(id);
         user.get().setStatus(u.getStatus());
         return userRepo.save(user.get());
@@ -84,6 +80,5 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(Long id) {
         userRepo.deleteById(id);
     }
-
 
 }

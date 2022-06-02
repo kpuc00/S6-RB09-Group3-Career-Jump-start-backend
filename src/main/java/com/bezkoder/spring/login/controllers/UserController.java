@@ -37,11 +37,7 @@ public class UserController {
   //TODO: we can also add job matcher role here
   public ResponseEntity<?> getCandidates(){
     List<User> candidates = userService.findCandidates();
-    if(!candidates.isEmpty()){
-      return ResponseEntity.status(HttpStatus.FOUND).body(candidates);
-    }
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
-    //TODO: this is unnecessary -> empty array instead
+    return ResponseEntity.status(HttpStatus.OK).body(candidates);
   }
 
   @GetMapping("/companies")
@@ -49,11 +45,7 @@ public class UserController {
   //TODO: we can also add job matcher role here
   public ResponseEntity<?> getCompanies(){
     List<User> companies = userService.findCompanies();
-    if(!companies.isEmpty()){
-      return ResponseEntity.status(HttpStatus.FOUND).body(companies);
-    }
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
-    //TODO: this is unnecessary -> empty array instead
+    return ResponseEntity.status(HttpStatus.OK).body(companies);
   }
 
   @PutMapping("/{id}")
