@@ -77,6 +77,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User updateUserQuestionnaire(Long id){
+        Optional<User> user = findById(id);
+        user.get().setQuestionnaireAnswered(true);
+        return userRepo.save(user.get());
+    }
+
+    @Override
     public void deleteUser(Long id) {
         userRepo.deleteById(id);
     }

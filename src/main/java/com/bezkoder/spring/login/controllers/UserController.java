@@ -68,6 +68,15 @@ public class UserController {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
   }
 
+  @GetMapping("/questionnaire/{id}")
+  public ResponseEntity<?> setQuestionnaireTrue(@PathVariable Long id){
+    if(userService.findById(id).isPresent()){
+      userService.updateUserQuestionnaire(id);
+      return ResponseEntity.status(HttpStatus.OK).body("Questionnaire Status Successfully changed");
+    }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+  }
+
   @DeleteMapping("/{id}")
   @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<?> deleteUser(@PathVariable Long id){
