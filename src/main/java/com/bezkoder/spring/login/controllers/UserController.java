@@ -15,28 +15,26 @@ import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, allowCredentials = "true")
 @RestController
-@RequestMapping("/api/admin/users")
+@RequestMapping("/admin/users")
 public class UserController {
 
   @Autowired
   UserService userService;
 
-  @GetMapping("/all")
-  public String allAccess() {
-    return "Public Content.";
-  }
-
   @GetMapping("/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
+  //TODO: we can also add job matcher role here
   public ResponseEntity<?> getUser(@PathVariable Long id) {
     Optional<User> user = userService.findById(id);
     if(user.isPresent()){
         return ResponseEntity.status(HttpStatus.FOUND).body(user.get());
     }
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
   }
 
   @GetMapping("/candidates")
   @PreAuthorize("hasRole('ADMIN')")
+  //TODO: we can also add job matcher role here
   public ResponseEntity<?> getCandidates(){
     List<User> candidates = userService.findCandidates();
     return ResponseEntity.status(HttpStatus.OK).body(candidates);
@@ -44,6 +42,7 @@ public class UserController {
 
   @GetMapping("/companies")
   @PreAuthorize("hasRole('ADMIN')")
+  //TODO: we can also add job matcher role here
   public ResponseEntity<?> getCompanies(){
     List<User> companies = userService.findCompanies();
     return ResponseEntity.status(HttpStatus.OK).body(companies);
@@ -56,7 +55,7 @@ public class UserController {
         userService.updateUserDetails(id, user);
         return ResponseEntity.status(HttpStatus.OK).body("Details Successfully changed");
       }
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
   }
 
   @PutMapping("/status/{id}")
@@ -66,7 +65,7 @@ public class UserController {
       userService.updateUserStatus(id, user);
       return ResponseEntity.status(HttpStatus.OK).body("Status Successfully changed");
     }
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
   }
 
   @DeleteMapping("/{id}")
@@ -76,7 +75,7 @@ public class UserController {
       userService.deleteUser(id);
       return ResponseEntity.status(HttpStatus.OK).body("Successfully deleted");
     }
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
   }
 
 }
