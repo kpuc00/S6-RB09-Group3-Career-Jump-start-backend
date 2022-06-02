@@ -44,6 +44,8 @@ public class User {
   @DateTimeFormat
   private Date dob;
 
+  private boolean questionnaireAnswered;
+
   @NotBlank
   @Size(max = 50)
   @Email
@@ -67,6 +69,31 @@ public class User {
 
   }
 
+  @Override
+  public String toString() {
+    return "User{" +
+            "id=" + id +
+            ", username='" + username + '\'' +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", phoneNumber='" + phoneNumber + '\'' +
+            ", dob=" + dob +
+            ", questionnaireAnswered=" + questionnaireAnswered +
+            ", email='" + email + '\'' +
+            ", password='" + password + '\'' +
+            ", roles=" + roles +
+            ", status=" + status +
+            '}';
+  }
+
+  public boolean isQuestionnaireAnswered() {
+    return questionnaireAnswered;
+  }
+
+  public void setQuestionnaireAnswered(boolean questionnaireAnswered) {
+    this.questionnaireAnswered = questionnaireAnswered;
+  }
+
   public User(String username, String firstName, String lastName, String phoneNumber, Date dob, String email, String password) {
     this.username = username;
     this.firstName = firstName;
@@ -75,6 +102,7 @@ public class User {
     this.dob = dob;
     this.email = email;
     this.password = password;
+    this.questionnaireAnswered = false;
   }
 
 
