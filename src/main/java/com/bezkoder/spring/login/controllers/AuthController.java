@@ -60,8 +60,7 @@ public class AuthController {
 
   private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-
-  private UserDetails getUserFromToken (String token) {
+  private UserDetails getUserFromToken(String token) {
     try {
       if (token != null && jwtUtils.validateJwtToken(token)) {
         String username = jwtUtils.getUserNameFromJwtToken(token);
@@ -107,12 +106,13 @@ public class AuthController {
 
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
         .body(new UserInfoResponse(userDetails.getUsername(),
-                                   userDetails.getFirstName(),
-                                   userDetails.getLastName(),
-                                   userDetails.getPhoneNumber(),
-                                   userDetails.getDob(),
-                                   userDetails.getEmail(),
-                                   roles));
+            userDetails.getFirstName(),
+            userDetails.getLastName(),
+            userDetails.getPhoneNumber(),
+            userDetails.getDob(),
+            userDetails.getEmail(),
+            userDetails.getQuestionnaireAnswered(),
+            roles));
   }
 
   @PostMapping("/signup")
@@ -127,12 +127,12 @@ public class AuthController {
 
     // Create new user's account
     User user = new User(signUpRequest.getUsername(),
-                         signUpRequest.getFirstName(),
-                         signUpRequest.getLastName(),
-                         signUpRequest.getPhoneNumber(),
-                         signUpRequest.getDob(),
-                         signUpRequest.getEmail(),
-                         encoder.encode(signUpRequest.getPassword()));
+        signUpRequest.getFirstName(),
+        signUpRequest.getLastName(),
+        signUpRequest.getPhoneNumber(),
+        signUpRequest.getDob(),
+        signUpRequest.getEmail(),
+        encoder.encode(signUpRequest.getPassword()));
 
     Set<String> strRoles = signUpRequest.getRole();
     Set<Role> roles = new HashSet<>();
@@ -142,26 +142,26 @@ public class AuthController {
     } else {
       strRoles.forEach(role -> {
         switch (role) {
-        case "admin":
-          Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-          roles.add(adminRole);
-          break;
-        case "company":
-          Role companyRole = roleRepository.findByName(ERole.ROLE_COMPANY)
-                  .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-          roles.add(companyRole);
-          break;
-        case "candidate":
-          Role candidateRole = roleRepository.findByName(ERole.ROLE_CANDIDATE)
-                  .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-          roles.add(candidateRole);
-          break;
-        case "matcher":
-          Role matcherRole = roleRepository.findByName(ERole.ROLE_MATCHER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-          roles.add(matcherRole);
-          break;
+          case "admin":
+            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(adminRole);
+            break;
+          case "company":
+            Role companyRole = roleRepository.findByName(ERole.ROLE_COMPANY)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+            roles.add(companyRole);
+            break;
+          case "candidate":
+            Role candidateRole = roleRepository.findByName(ERole.ROLE_CANDIDATE)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+            roles.add(candidateRole);
+            break;
+          case "matcher":
+            Role matcherRole = roleRepository.findByName(ERole.ROLE_MATCHER)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+            roles.add(matcherRole);
+            break;
         }
       });
     }

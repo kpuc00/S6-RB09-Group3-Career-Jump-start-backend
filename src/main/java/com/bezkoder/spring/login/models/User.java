@@ -15,11 +15,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "users",
-       uniqueConstraints = {
-           @UniqueConstraint(columnNames = "username"),
-           @UniqueConstraint(columnNames = "email")
-       })
+@Table(name = "users", uniqueConstraints = {
+    @UniqueConstraint(columnNames = "username"),
+    @UniqueConstraint(columnNames = "email")
+})
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,9 +55,7 @@ public class User {
   private String password;
 
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(name = "user_roles", 
-             joinColumns = @JoinColumn(name = "user_id"),
-             inverseJoinColumns = @JoinColumn(name = "role_id"))
+  @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
 
   @Column(columnDefinition = "varchar(32) default 'UNASSIGNED'")
@@ -72,18 +69,18 @@ public class User {
   @Override
   public String toString() {
     return "User{" +
-            "id=" + id +
-            ", username='" + username + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", phoneNumber='" + phoneNumber + '\'' +
-            ", dob=" + dob +
-            ", questionnaireAnswered=" + questionnaireAnswered +
-            ", email='" + email + '\'' +
-            ", password='" + password + '\'' +
-            ", roles=" + roles +
-            ", status=" + status +
-            '}';
+        "id=" + id +
+        ", username='" + username + '\'' +
+        ", firstName='" + firstName + '\'' +
+        ", lastName='" + lastName + '\'' +
+        ", phoneNumber='" + phoneNumber + '\'' +
+        ", dob=" + dob +
+        ", questionnaireAnswered=" + questionnaireAnswered +
+        ", email='" + email + '\'' +
+        ", password='" + password + '\'' +
+        ", roles=" + roles +
+        ", status=" + status +
+        '}';
   }
 
   public boolean isQuestionnaireAnswered() {
@@ -94,7 +91,8 @@ public class User {
     this.questionnaireAnswered = questionnaireAnswered;
   }
 
-  public User(String username, String firstName, String lastName, String phoneNumber, Date dob, String email, String password) {
+  public User(String username, String firstName, String lastName, String phoneNumber, Date dob, String email,
+      String password) {
     this.username = username;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -104,8 +102,6 @@ public class User {
     this.password = password;
     this.questionnaireAnswered = false;
   }
-
-
 
   public Long getId() {
     return id;
@@ -131,27 +127,27 @@ public class User {
     this.firstName = firstName;
   }
 
-  public String getLastName(){
+  public String getLastName() {
     return lastName;
   }
 
-  public void setLastName(String lastName){
+  public void setLastName(String lastName) {
     this.lastName = lastName;
   }
 
-  public String getPhoneNumber(){
+  public String getPhoneNumber() {
     return phoneNumber;
   }
 
-  public void setPhoneNumber(String phoneNumber){
+  public void setPhoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
   }
 
-  public Date getDob(){
+  public Date getDob() {
     return dob;
   }
 
-  public void setDob(Date dob){
+  public void setDob(Date dob) {
     this.dob = dob;
   }
 
@@ -185,6 +181,14 @@ public class User {
 
   public void setStatus(EStatus status) {
     this.status = status;
+  }
+
+  public Boolean getQuestionnaireAnswered() {
+    return questionnaireAnswered;
+  }
+
+  public void setQuestionnaireAnswered(Boolean questionnaireAnswered) {
+    this.questionnaireAnswered = questionnaireAnswered;
   }
 
 }
