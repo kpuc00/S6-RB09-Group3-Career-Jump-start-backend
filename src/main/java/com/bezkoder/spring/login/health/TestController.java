@@ -14,8 +14,8 @@ public class TestController {
         return "App is running.";
     }
 
-    @GetMapping("morbius")
-    public String healthCheckMorbius() {
-        return "App is Morbing";
+    @GetMapping("deployment")
+    public String healthCheckDeployment() {
+        return "Deployment is ok";
     }
 }
