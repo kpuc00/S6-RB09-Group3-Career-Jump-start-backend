@@ -52,7 +52,8 @@
       "readonlyRootFilesystem": null,
       "dockerLabels": null,
       "systemControls": null,
-      "privileged": null
+      "privileged": null,
+      "name": "authF_container"
     }
   ],
   "placementConstraints": [],
