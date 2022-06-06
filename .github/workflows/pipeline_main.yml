@@ -23,28 +23,50 @@
 # 4. Store an IAM user access key in GitHub Actions secrets named `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`.
 #    See the documentation for each action used below for the recommended IAM policies for this IAM user,
 #    and best practices on handling the access key credentials.
+name: Java CI with Maven + Deploy to AWS ECS
 
-name: Deploy to Amazon ECS
-
-on: push
-#  push:
-#    branches:
-#      - "main"
+on:
+  push:
+    branches: [ main ]
 
 env:
-  AWS_REGION: eu-central-1                   # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: auth_repo           # set this to your Amazon ECR repository name
-  ECS_SERVICE: Auth_Service                 # set this to your Amazon ECS service name
-  ECS_CLUSTER: authFcluster                 # set this to your Amazon ECS cluster name
+  AWS_REGION: eu-central-1             # set this to your preferred AWS region, e.g. us-west-1
+  ECR_REPOSITORY: auth_repo            # set this to your Amazon ECR repository name
+  ECS_SERVICE: Auth_Service            # set this to your Amazon ECS service name
+  ECS_CLUSTER: authFcluster            # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION: ./task-def.json # set this to the path to your Amazon ECS task definition
   # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME: authF_container           # set this to the name of the container in the
+  CONTAINER_NAME: authF_container      # set this to the name of the container in the
   # containerDefinitions section of your task definition
 
 permissions:
   contents: read
 
 jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: maven
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
+  test:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Testing with Maven
+        run: mvn test
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
