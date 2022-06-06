@@ -1,6 +1,5 @@
 package com.bezkoder.spring.login.payload.response;
 
-
 import com.bezkoder.spring.login.models.EStatus;
 
 import java.time.LocalDateTime;
@@ -14,15 +13,18 @@ public class UserInfoResponse {
 	private String phoneNumber;
 	private Date dob;
 	private String email;
+	private Boolean questionnaireAnswered;
 	private List<String> roles;
 
-	public UserInfoResponse(String username, String firstName, String lastName, String phoneNumber, Date dob, String email, List<String> roles) {
+	public UserInfoResponse(String username, String firstName, String lastName, String phoneNumber, Date dob,
+			String email, Boolean questionnaireAnswered, List<String> roles) {
 		this.username = username;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;
 		this.dob = dob;
 		this.email = email;
+		this.questionnaireAnswered = questionnaireAnswered;
 		this.roles = roles;
 	}
 
@@ -42,36 +44,44 @@ public class UserInfoResponse {
 		this.username = username;
 	}
 
-	public String getFirstName(){
+	public String getFirstName() {
 		return firstName;
 	}
 
-	public void SetFirstName(String firstName){
+	public void SetFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 
-	public String getLastName(){
+	public String getLastName() {
 		return lastName;
 	}
 
-	public void setLastName(String lastName){
+	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 
-	public String getPhoneNumber(){
+	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 
-	public void setPhoneNumber(String phoneNumber){
+	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public Date getDob(){
+	public Date getDob() {
 		return dob;
 	}
 
-	public void setDob(Date dob){
+	public void setDob(Date dob) {
 		this.dob = dob;
+	}
+
+	public Boolean getQuestionnaireAnswered() {
+		return questionnaireAnswered;
+	}
+
+	public void SetQuestionnaireAnswered(Boolean questionnaireAnswered) {
+		this.questionnaireAnswered = questionnaireAnswered;
 	}
 
 	public List<String> getRoles() {
