@@ -9,50 +9,45 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.websocket.server.PathParam;
 import java.util.List;
 import java.util.Optional;
 
 
 @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, allowCredentials = "true")
 @RestController
-@RequestMapping("/api/admin/users")
+@RequestMapping("/admin/users")
 public class UserController {
 
   @Autowired
   UserService userService;
 
-  @GetMapping("/all")
-  public String allAccess() {
-    return "Public Content.";
-  }
-
   @GetMapping("/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
+  //TODO: we can also add job matcher role here
   public ResponseEntity<?> getUser(@PathVariable Long id) {
     Optional<User> user = userService.findById(id);
     if(user.isPresent()){
         return ResponseEntity.status(HttpStatus.FOUND).body(user.get());
     }
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
   }
 
   @GetMapping("/candidates")
   @PreAuthorize("hasRole('ADMIN')")
+  //TODO: we can also add job matcher role here
   public ResponseEntity<?> getCandidates(){
-      List<User> candidates = userService.findCandidates();
-    if(!candidates.isEmpty()){
-      return ResponseEntity.status(HttpStatus.FOUND).body(candidates);
-    }
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
+    List<User> candidates = userService.findCandidates();
+    return ResponseEntity.status(HttpStatus.OK).body(candidates);
   }
 
   @GetMapping("/companies")
   @PreAuthorize("hasRole('ADMIN')")
+  //TODO: we can also add job matcher role here
   public ResponseEntity<?> getCompanies(){
     List<User> companies = userService.findCompanies();
-    if(!companies.isEmpty()){
-      return ResponseEntity.status(HttpStatus.FOUND).body(companies);
-    }
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
+    return ResponseEntity.status(HttpStatus.OK).body(companies);
   }
 
   @PutMapping("/{id}")
@@ -62,7 +57,7 @@ public class UserController {
         userService.updateUserDetails(id, user);
         return ResponseEntity.status(HttpStatus.OK).body("Details Successfully changed");
       }
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
   }
 
   @PutMapping("/status/{id}")
@@ -72,7 +67,13 @@ public class UserController {
       userService.updateUserStatus(id, user);
       return ResponseEntity.status(HttpStatus.OK).body("Status Successfully changed");
     }
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+  }
+
+  @GetMapping(value = "/questionnaire/{username}")
+  public ResponseEntity<?> setQuestionnaireTrue(@PathVariable() String username){
+      userService.updateUserQuestionnaire(username);
+      return ResponseEntity.status(HttpStatus.OK).body("Questionnaire Status Successfully changed");
   }
 
   @DeleteMapping("/{id}")
@@ -82,7 +83,7 @@ public class UserController {
       userService.deleteUser(id);
       return ResponseEntity.status(HttpStatus.OK).body("Successfully deleted");
     }
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
   }
 
 }

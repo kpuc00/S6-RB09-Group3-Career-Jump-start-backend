@@ -17,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class UserDetailsImpl implements UserDetails {
   private static final long serialVersionUID = 1L;
 
-
   private String username;
 
   private String firstName;
@@ -33,9 +32,12 @@ public class UserDetailsImpl implements UserDetails {
   @JsonIgnore
   private String password;
 
+  private Boolean questionnaireAnswered;
+
   private Collection<? extends GrantedAuthority> authorities;
 
-  public UserDetailsImpl(String username, String firstName, String lastName, String phoneNumber, Date dob, String email, String password,
+  public UserDetailsImpl(String username, String firstName, String lastName, String phoneNumber, Date dob, String email,
+      String password, Boolean questionnaireAnswered,
       Collection<? extends GrantedAuthority> authorities) {
     this.username = username;
     this.firstName = firstName;
@@ -44,6 +46,7 @@ public class UserDetailsImpl implements UserDetails {
     this.dob = dob;
     this.email = email;
     this.password = password;
+    this.questionnaireAnswered = questionnaireAnswered;
     this.authorities = authorities;
   }
 
@@ -59,7 +62,8 @@ public class UserDetailsImpl implements UserDetails {
         user.getPhoneNumber(),
         user.getDob(),
         user.getEmail(),
-        user.getPassword(), 
+        user.getPassword(),
+        user.getQuestionnaireAnswered(),
         authorities);
   }
 
@@ -68,28 +72,28 @@ public class UserDetailsImpl implements UserDetails {
     return authorities;
   }
 
-  public String getFirstName(){
+  public String getFirstName() {
     return firstName;
   }
 
-
-  public String getLastName(){
+  public String getLastName() {
     return lastName;
   }
 
-
-  public String getPhoneNumber(){
+  public String getPhoneNumber() {
     return phoneNumber;
   }
 
-
-  public Date getDob(){
+  public Date getDob() {
     return dob;
   }
 
-
   public String getEmail() {
     return email;
+  }
+
+  public Boolean getQuestionnaireAnswered() {
+    return questionnaireAnswered;
   }
 
   @Override

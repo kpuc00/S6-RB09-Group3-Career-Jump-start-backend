@@ -59,8 +59,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
       .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
       .authorizeRequests().antMatchers("/api/auth/**").permitAll()
             .antMatchers("/api/admin/**").authenticated()
-      .antMatchers("/api/test/**").permitAll()
-      .anyRequest().authenticated();
+            .antMatchers("/welcome").permitAll();
+    //removed it because every time it says authentication required even when not
 
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
   }
