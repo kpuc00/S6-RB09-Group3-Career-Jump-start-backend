@@ -37,7 +37,6 @@
       "memoryReservation": 256,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": "290170994574.dkr.ecr.eu-central-1.amazonaws.com/auth_repo:latest",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
@@ -54,7 +53,6 @@
       "dockerLabels": null,
       "systemControls": null,
       "privileged": null,
-      "name": "authF_container"
     }
   ],
   "placementConstraints": [],

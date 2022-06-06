@@ -18,4 +18,7 @@ public class TestController {
     public String healthCheckMorbius() {
         return "App is Morbing";
     }
+
+    @GetMapping("stefan")
+    public String healthCheckStefan() {return "Stefaneee";}
 }
