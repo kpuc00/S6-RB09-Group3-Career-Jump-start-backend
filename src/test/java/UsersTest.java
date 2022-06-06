@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,11 +42,12 @@ class UsersTest {
     void findById() throws ParseException {
         //GIVEN
         User user = createAdminUser();
+        User fail_user = createAdminUser();
         when(repository.findById(user.getId())).thenReturn(Optional.of(user));
         //WHEN
         Optional<User> existingUser = service.findById(user.getId());
         //THEN
-        assertThat(existingUser).isEqualTo(Optional.of(user));
+        assertThat(existingUser).isEqualTo(Optional.of(fail_user));
     }
 
     @Test
