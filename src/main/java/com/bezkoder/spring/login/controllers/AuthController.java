@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import com.bezkoder.spring.login.security.services.UserDetailsServiceImpl;
+import com.bezkoder.spring.login.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -58,6 +59,9 @@ public class AuthController {
   @Autowired
   private UserDetailsServiceImpl userDetailsService;
 
+  @Autowired
+  UserService userService;
+
   private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
   private UserDetails getUserFromToken(String token) {
@@ -79,6 +83,12 @@ public class AuthController {
     System.out.println("Received Token:" + token);
     assert userDetails != null;
     return userDetails.getUsername();
+  }
+
+  @RabbitListener(queues = "queueTest")
+  public String TestRabbitMq(String token) {
+    System.out.println("Received Token:" + token);
+    return "received-"+token;
   }
 
   @RequestMapping(value = "/checkadmin", method = RequestMethod.GET)
