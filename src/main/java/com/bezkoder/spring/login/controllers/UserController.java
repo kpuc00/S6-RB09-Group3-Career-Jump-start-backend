@@ -71,9 +71,9 @@ public class UserController {
   }
 
   @GetMapping(value = "/questionnaire/{username}")
-  public ResponseEntity<?> setQuestionnaireTrue(@PathVariable() String username){
-      userService.updateUserQuestionnaire(username);
-      return ResponseEntity.status(HttpStatus.OK).body("Questionnaire Status Successfully changed");
+  public ResponseEntity<?> setQuestionnaireTrue(@PathVariable() String username) {
+    userService.updateUserQuestionnaire(username);
+    return ResponseEntity.status(HttpStatus.OK).body("Answers submitted successfully!");
   }
 
   @DeleteMapping("/{id}")
